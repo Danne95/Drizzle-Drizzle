@@ -1,0 +1,32 @@
+[
+  {
+    "ticker": "OPEN",
+    "mentions": 1240,
+    "mention_change_percent": 340,
+    "sentiment": 0.62,
+    "squeeze_language": true,
+    "top_phrase": "OPEN could squeeze hard if volume keeps stacking",
+    "source": "Demo Reddit Scanner",
+    "fetched_at": "2026-05-13T11:21:59.324406+00:00"
+  },
+  {
+    "ticker": "GME",
+    "mentions": 980,
+    "mention_change_percent": 185,
+    "sentiment": 0.48,
+    "squeeze_language": true,
+    "top_phrase": "classic meme basket waking up again",
+    "source": "Demo Reddit Scanner",
+    "fetched_at": "2026-05-13T11:21:59.324406+00:00"
+  },
+  {
+    "ticker": "SOFI",
+    "mentions": 410,
+    "mention_change_percent": 76,
+    "sentiment": 0.34,
+    "squeeze_language": false,
+    "top_phrase": "fintech earnings setup has retail attention",
+    "source": "Demo Reddit Scanner",
+    "fetched_at": "2026-05-13T11:21:59.324406+00:00"
+  }
+]

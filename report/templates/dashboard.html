@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ app_name }} - {{ generated_at.strftime("%Y-%m-%d %H:%M") }}</title>
+  <style>
+    {% include "styles.css" %}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="terminal-header">
+      <div>
+        <p class="eyebrow">Local Market Intelligence Scanner</p>
+        <h1>{{ app_name }}</h1>
+      </div>
+      <div class="timestamp">
+        <span>Generated</span>
+        <strong>{{ generated_at.strftime("%Y-%m-%d %H:%M") }}</strong>
+      </div>
+    </header>
+
+    <section class="brief-grid">
+      <article class="brief-panel wide">
+        <p class="eyebrow">Market Brief</p>
+        <h2>{{ market_brief.headline }}</h2>
+        <p>{{ market_brief.narrative }}</p>
+      </article>
+      <article class="metric-card">
+        <span>News Items</span>
+        <strong>{{ market_brief.news_items_scanned }}</strong>
+      </article>
+      <article class="metric-card">
+        <span>Serious Signals</span>
+        <strong>{{ market_brief.serious_count }}</strong>
+      </article>
+      <article class="metric-card hot">
+        <span>High Risk</span>
+        <strong>{{ market_brief.high_risk_count }}</strong>
+      </article>
+    </section>
+
+    <section class="chart-grid">
+      <div class="chart-panel large">{{ charts.score_chart | safe }}</div>
+      <div class="chart-panel">{{ charts.risk_gauge | safe }}</div>
+      <div class="chart-panel full">{{ charts.theme_heatmap | safe }}</div>
+    </section>
+
+    <section class="category-section">
+      <div class="section-heading">
+        <p class="eyebrow">Category A</p>
+        <h2>Serious Market Signals</h2>
+      </div>
+      <div class="opportunity-grid">
+        {% for item in categories.serious %}
+          {% include "opportunity_card.html" %}
+        {% else %}
+          <p class="empty">No serious market signals surfaced in this run.</p>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="category-section high-risk-section">
+      <div class="section-heading">
+        <p class="eyebrow">Category B</p>
+        <h2>High-Risk / Speculative Tape</h2>
+      </div>
+      <div class="opportunity-grid">
+        {% for item in categories.high_risk %}
+          {% include "opportunity_card.html" %}
+        {% else %}
+          <p class="empty">No speculative momentum signals surfaced in this run.</p>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="black-magic">
+      <div class="section-heading">
+        <p class="eyebrow">Category C</p>
+        <h2>Meme Black Magic Recommendations</h2>
+      </div>
+      <p class="disclaimer">{{ black_magic.disclaimer }}</p>
+      <div class="oracle-grid">
+        <article><span>Zodiac Desk</span><strong>{{ black_magic.zodiac }}</strong></article>
+        <article><span>Chinese Zodiac</span><strong>{{ black_magic.chinese_zodiac }}</strong></article>
+        <article><span>Moon Phase</span><strong>{{ black_magic.moon_phase }}</strong></article>
+        <article><span>Numerology</span><strong>{{ black_magic.numerology_score }}</strong></article>
+      </div>
+      <div class="oracle-copy">
+        <p>{{ black_magic.blessing }}</p>
+        <p>{{ black_magic.warning }}</p>
+        <ul>
+          {% for recommendation in black_magic.recommendations %}
+          <li>{{ recommendation }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </section>
+
+    <footer>
+      <strong>Raw snapshots</strong>
+      {% for name, path in snapshot_paths.items() %}
+        <span>{{ name }}: {{ path }}</span>
+      {% endfor %}
+    </footer>
+  </main>
+</body>
+</html>

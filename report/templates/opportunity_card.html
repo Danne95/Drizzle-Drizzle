@@ -1,0 +1,38 @@
+<article class="opportunity-card {{ item.category }}">
+  <div class="card-topline">
+    <div>
+      <span class="ticker">{{ item.ticker }}</span>
+      <span class="risk">{{ item.risk }} Risk</span>
+    </div>
+    <strong class="score">{{ item.score }}</strong>
+  </div>
+  <p class="summary">{{ item.summary }}</p>
+  {% if item.themes %}
+  <div class="chips">
+    {% for theme in item.themes %}
+      <span>{{ theme }}</span>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <div class="explain-grid">
+    <div>
+      <h3>Weighted Signals</h3>
+      {% for signal in item.signals[:5] %}
+        <div class="signal-row">
+          <span>{{ signal.type.replace("_", " ") }}</span>
+          <strong>+{{ signal.weight }}</strong>
+        </div>
+      {% endfor %}
+    </div>
+    <div>
+      <h3>Top Evidence</h3>
+      {% for source in item.top_sources[:3] %}
+        <a class="source-row" href="{{ source.link | default('#') }}" target="_blank">
+          <span>{{ source.source }}</span>
+          <strong>{{ source.title }}</strong>
+          <em>{{ source.snippet }}</em>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</article>

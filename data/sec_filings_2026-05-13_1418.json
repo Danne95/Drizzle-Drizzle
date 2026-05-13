@@ -1,0 +1,20 @@
+[
+  {
+    "ticker": "PLTR",
+    "form": "8-K",
+    "filing_date": "2026-05-13",
+    "headline": "Material agreement disclosed in new 8-K",
+    "importance": 2.6,
+    "source": "Demo SEC Filings",
+    "fetched_at": "2026-05-13T11:18:10.810705+00:00"
+  },
+  {
+    "ticker": "RIVN",
+    "form": "4",
+    "filing_date": "2026-05-13",
+    "headline": "Insider transaction detected",
+    "importance": 1.7,
+    "source": "Demo SEC Filings",
+    "fetched_at": "2026-05-13T11:18:10.810705+00:00"
+  }
+]
