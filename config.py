@@ -65,27 +65,6 @@ THEME_KEYWORDS = {
     "Crypto": ["bitcoin", "crypto", "ethereum", "blockchain"],
 }
 
-# Compact dictionary that keeps ticker extraction explainable and easy to extend.
-TICKER_ALIASES = {
-    "AAPL": ["Apple"],
-    "AMD": ["AMD", "Advanced Micro Devices"],
-    "AMZN": ["Amazon"],
-    "BABA": ["Alibaba"],
-    "COIN": ["Coinbase"],
-    "IBM": ["IBM"],
-    "GME": ["GameStop", "Gamestop"],
-    "GOOGL": ["Alphabet", "Google"],
-    "META": ["Meta", "Facebook"],
-    "MSFT": ["Microsoft"],
-    "NVDA": ["Nvidia", "NVIDIA"],
-    "OKLO": ["Oklo"],
-    "PLTR": ["Palantir"],
-    "RIVN": ["Rivian"],
-    "SMCI": ["Super Micro", "Supermicro"],
-    "SOFI": ["SoFi"],
-    "TSLA": ["Tesla"],
-}
-
 COMMON_FALSE_TICKERS = {
     "A",
     "AI",

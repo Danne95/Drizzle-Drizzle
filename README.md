@@ -1,17 +1,19 @@
 # Drizzle Drizzle Market Oracle
 
-Local Python market intelligence scanner that aggregates financial news, demo market movers, demo Reddit momentum, demo SEC filing signals, and a deliberately comedic finance astrology oracle.
+Local Python market intelligence scanner that aggregates financial news, dynamic listed-symbol detection, and a deliberately comedic finance astrology oracle.
 
 This is a research and reporting tool. It is not a trading bot and does not provide financial advice.
 
 ## What It Generates
 
-- Interactive HTML dashboard saved in `reports/`
+- Interactive HTML dashboard saved as `latest_report.html` in the project root
+- Timestamped HTML dashboard copies saved in `reports/`
 - Raw JSON snapshots saved in `data/`
 - Serious market signal section
 - High-risk speculative momentum section
 - Meme black magic finance section
 - Explainable scores with weighted signals and evidence snippets
+- No preset closed ticker list in active extraction logic
 
 ## Setup
 
@@ -37,6 +39,9 @@ python main.py --mock-news
 
 The generated report path is printed after each run.
 
+Each run also replaces `latest_report.html` in the project root. Historical
+copies use `YYYY-MM-DD_HHMM.html` naming inside `reports/`.
+
 ## Project Structure
 
 ```text
@@ -48,6 +53,7 @@ The generated report path is printed after each run.
 │   ├── market_movers.py
 │   ├── reddit_scanner.py
 │   ├── sec_filings.py
+│   ├── symbol_universe.py
 │   └── astrology_engine.py
 ├── processors/
 │   ├── ticker_extractor.py
@@ -65,12 +71,19 @@ The generated report path is printed after each run.
 
 ## Extending Sources
 
-Each source module returns plain dictionaries. Replace demo implementations in `sources/market_movers.py`, `sources/reddit_scanner.py`, or `sources/sec_filings.py` with real API clients while keeping the same output keys.
+Each source module returns plain dictionaries. `sources/market_movers.py`,
+`sources/reddit_scanner.py`, and `sources/sec_filings.py` intentionally return
+empty lists until you wire real APIs into them, so normal runs do not inject
+preset tickers.
 
 Useful future upgrades:
 
 - Add paid market data provider in `sources/market_movers.py`
 - Add Reddit API or Pushshift-compatible source in `sources/reddit_scanner.py`
 - Add SEC submissions API support in `sources/sec_filings.py`
-- Expand `TICKER_ALIASES` in `config.py`
 - Tune signal weights in `config.py`
+
+Ticker detection does not use a preset ticker list in `config.py`. The scanner
+downloads and caches a broad public listed-symbol universe in
+`sources/symbol_universe.py`, then uses that universe plus cashtags and exact
+uppercase ticker-like mentions.

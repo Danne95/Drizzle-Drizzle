@@ -25,7 +25,6 @@ ZODIAC = [
 ]
 
 CHINESE_ZODIAC = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"]
-LUCKY_TICKERS = ["BABA", "PLTR", "SOFI", "NVDA", "GME", "OPEN", "TSLA", "COIN"]
 WARNINGS = [
     "Avoid tickers containing the letter R until the vibes improve.",
     "Mercury retrograde suggests taking profits before bragging online.",
@@ -45,12 +44,13 @@ def _moon_phase(day: int) -> str:
     return phases[day % len(phases)]
 
 
-def generate_black_magic_reading(now: datetime | None = None) -> dict:
+def generate_black_magic_reading(now: datetime | None = None, candidate_tickers: list[str] | None = None) -> dict:
     now = now or datetime.now()
     seed = int(now.strftime("%Y%m%d"))
     rng = random.Random(seed)
     numerology = sum(int(digit) for digit in now.strftime("%Y%m%d"))
-    lucky_ticker = rng.choice(LUCKY_TICKERS)
+    candidates = sorted({ticker for ticker in candidate_tickers or [] if ticker})
+    lucky_ticker = rng.choice(candidates) if candidates else "TBD"
     forbidden_letter = rng.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
     return {

@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 from datetime import datetime
 from pathlib import Path
 
-from config import DATA_DIR, REPORTS_DIR
+from config import BASE_DIR, DATA_DIR, REPORTS_DIR
 from processors.scoring_engine import score_opportunities
 from processors.sentiment_engine import attach_sentiment
 from processors.summarizer import build_market_brief
@@ -18,6 +19,7 @@ from sources.market_movers import fetch_market_movers
 from sources.reddit_scanner import fetch_reddit_signals
 from sources.rss_news import fetch_rss_news
 from sources.sec_filings import fetch_sec_filings
+from sources.symbol_universe import fetch_symbol_universe
 
 
 def ensure_directories() -> None:
@@ -35,13 +37,16 @@ def run(use_mock_news: bool = False) -> Path:
     ensure_directories()
     now = datetime.now()
     run_stamp = now.strftime("%Y-%m-%d_%H%M")
-    report_name = f"{now.strftime('%Y-%m-%d')}-{'AM' if now.hour < 12 else 'PM'}.html"
+    report_name = f"{run_stamp}.html"
+    latest_report_path = BASE_DIR / "latest_report.html"
 
+    symbol_universe = fetch_symbol_universe()
     raw_news = fetch_rss_news(use_mock=use_mock_news)
     market_movers = fetch_market_movers()
     reddit_signals = fetch_reddit_signals()
     sec_filings = fetch_sec_filings()
-    black_magic = generate_black_magic_reading(now)
+    symbol_candidates = [item["ticker"] for item in symbol_universe if item.get("ticker")]
+    black_magic = generate_black_magic_reading(now, candidate_tickers=symbol_candidates)
 
     snapshot_paths = {
         "news": str(snapshot_json("news", raw_news, run_stamp)),
@@ -49,9 +54,10 @@ def run(use_mock_news: bool = False) -> Path:
         "reddit": str(snapshot_json("reddit", reddit_signals, run_stamp)),
         "sec_filings": str(snapshot_json("sec_filings", sec_filings, run_stamp)),
         "black_magic": str(snapshot_json("black_magic", black_magic, run_stamp)),
+        "symbol_universe": str(snapshot_json("symbol_universe", symbol_universe, run_stamp)),
     }
 
-    news_with_tickers = attach_tickers(raw_news)
+    news_with_tickers = attach_tickers(raw_news, symbol_universe=symbol_universe)
     news_with_sentiment = attach_sentiment(news_with_tickers)
 
     opportunities = score_opportunities(
@@ -70,6 +76,7 @@ def run(use_mock_news: bool = False) -> Path:
         black_magic=black_magic,
         snapshot_paths=snapshot_paths,
     )
+    shutil.copyfile(report_path, latest_report_path)
     return report_path
 
 
@@ -87,3 +94,4 @@ if __name__ == "__main__":
     args = parse_args()
     output = run(use_mock_news=args.mock_news)
     print(f"Report generated: {output}")
+    print(f"Latest report copied to: {BASE_DIR / 'latest_report.html'}")
