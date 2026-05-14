@@ -36,15 +36,24 @@
         <strong>{{ market_brief.serious_count }}</strong>
       </article>
       <article class="metric-card hot">
-        <span>High Risk</span>
+        <span>Meme / Speculative</span>
         <strong>{{ market_brief.high_risk_count }}</strong>
       </article>
     </section>
 
     <section class="chart-grid">
-      <div class="chart-panel large">{{ charts.score_chart | safe }}</div>
-      <div class="chart-panel">{{ charts.risk_gauge | safe }}</div>
-      <div class="chart-panel full">{{ charts.theme_heatmap | safe }}</div>
+      <div class="chart-panel large">
+        {{ charts.score_chart | safe }}
+        <p class="chart-caption">A relative evidence score for prioritizing research. Higher means more independent or heavier signals stacked up; it is not a prediction or recommendation.</p>
+      </div>
+      <div class="chart-panel">
+        {{ charts.risk_gauge | safe }}
+        <p class="chart-caption">Percent of surfaced tickers classified as speculative. 0% means the current run did not find meme/squeeze-style evidence.</p>
+      </div>
+      <div class="chart-panel full">
+        {{ charts.theme_chart | safe }}
+        <p class="chart-caption">Shows which broad story themes appeared in the current ticker list.</p>
+      </div>
     </section>
 
     <section class="category-section">
@@ -64,7 +73,7 @@
     <section class="category-section high-risk-section">
       <div class="section-heading">
         <p class="eyebrow">Category B</p>
-        <h2>High-Risk / Speculative Tape</h2>
+        <h2>Degenerate Momentum Watch</h2>
       </div>
       <div class="opportunity-grid">
         {% for item in categories.high_risk %}
@@ -81,20 +90,45 @@
         <h2>Meme Black Magic Recommendations</h2>
       </div>
       <p class="disclaimer">{{ black_magic.disclaimer }}</p>
-      <div class="oracle-grid">
-        <article><span>Zodiac Desk</span><strong>{{ black_magic.zodiac }}</strong></article>
-        <article><span>Chinese Zodiac</span><strong>{{ black_magic.chinese_zodiac }}</strong></article>
-        <article><span>Moon Phase</span><strong>{{ black_magic.moon_phase }}</strong></article>
-        <article><span>Numerology</span><strong>{{ black_magic.numerology_score }}</strong></article>
-      </div>
-      <div class="oracle-copy">
-        <p>{{ black_magic.blessing }}</p>
-        <p>{{ black_magic.warning }}</p>
-        <ul>
-          {% for recommendation in black_magic.recommendations %}
-          <li>{{ recommendation }}</li>
-          {% endfor %}
-        </ul>
+      <div class="oracle-split">
+        <article class="oracle-panel">
+          <h3>Generic Market Astrology</h3>
+          <div class="oracle-grid compact">
+            <article><span>Zodiac Desk</span><strong>{{ black_magic.generic.zodiac }}</strong></article>
+            <article><span>Chinese Zodiac</span><strong>{{ black_magic.generic.chinese_zodiac }}</strong></article>
+            <article><span>Moon Phase</span><strong>{{ black_magic.generic.moon_phase }}</strong></article>
+            <article><span>Numerology</span><strong>{{ black_magic.generic.numerology_score }}</strong></article>
+          </div>
+          <div class="oracle-copy">
+            <p>{{ black_magic.generic.blessing }}</p>
+            <p>{{ black_magic.generic.warning }}</p>
+            <ul>
+              {% for recommendation in black_magic.generic.recommendations %}
+              <li>{{ recommendation }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </article>
+
+        <article class="oracle-panel personal-oracle">
+          <h3>Personal Chaos Reading</h3>
+          <div class="oracle-grid compact">
+            <article><span>Your Sign</span><strong>{{ black_magic.personal.zodiac }}</strong></article>
+            <article><span>Your Cycle</span><strong>{{ black_magic.personal.chinese_zodiac }}</strong></article>
+            <article><span>Moon Phase</span><strong>{{ black_magic.personal.moon_phase }}</strong></article>
+            <article><span>Private Numerology</span><strong>{{ black_magic.personal.numerology_score }}</strong></article>
+          </div>
+          <div class="oracle-copy">
+            <p>{{ black_magic.personal.note }}</p>
+            <p>{{ black_magic.personal.blessing }}</p>
+            <p>{{ black_magic.personal.warning }}</p>
+            <ul>
+              {% for recommendation in black_magic.personal.recommendations %}
+              <li>{{ recommendation }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </article>
       </div>
     </section>
 

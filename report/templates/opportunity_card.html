@@ -2,10 +2,18 @@
   <div class="card-topline">
     <div>
       <span class="ticker">{{ item.ticker }}</span>
-      <span class="risk">{{ item.risk }} Risk</span>
+      <span class="company-name">{{ item.company }}</span>
     </div>
-    <strong class="score">{{ item.score }}</strong>
+    <div class="score-box">
+      <strong class="score">{{ item.score }}</strong>
+      <span>{{ item.score_label }}</span>
+    </div>
   </div>
+  <p class="score-help">{{ item.score_help }}</p>
+  {% if item.category_note %}
+  <p class="category-note">{{ item.category_note }}</p>
+  {% endif %}
+  <p class="top-reason">{{ item.top_reason }}</p>
   <p class="summary">{{ item.summary }}</p>
   {% if item.themes %}
   <div class="chips">
@@ -16,11 +24,14 @@
   {% endif %}
   <div class="explain-grid">
     <div>
-      <h3>Weighted Signals</h3>
+      <h3>Why It Scored</h3>
       {% for signal in item.signals[:5] %}
         <div class="signal-row">
-          <span>{{ signal.type.replace("_", " ") }}</span>
-          <strong>+{{ signal.weight }}</strong>
+          <span>
+            <strong>{{ signal.label }}</strong>
+            <em>{{ signal.description }}</em>
+          </span>
+          <b>+{{ signal.weight }}</b>
         </div>
       {% endfor %}
     </div>

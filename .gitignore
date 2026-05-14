@@ -2,6 +2,7 @@
 /data/
 /reports/
 /latest_report.html
+/private/
 
 # Python runtime artifacts
 __pycache__/

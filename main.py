@@ -20,6 +20,7 @@ from sources.reddit_scanner import fetch_reddit_signals
 from sources.rss_news import fetch_rss_news
 from sources.sec_filings import fetch_sec_filings
 from sources.symbol_universe import fetch_symbol_universe
+from sources.personal_oracle_profile import load_private_oracle_profile
 
 
 def ensure_directories() -> None:
@@ -45,8 +46,20 @@ def run(use_mock_news: bool = False) -> Path:
     market_movers = fetch_market_movers()
     reddit_signals = fetch_reddit_signals()
     sec_filings = fetch_sec_filings()
-    symbol_candidates = [item["ticker"] for item in symbol_universe if item.get("ticker")]
-    black_magic = generate_black_magic_reading(now, candidate_tickers=symbol_candidates)
+    news_with_tickers = attach_tickers(raw_news, symbol_universe=symbol_universe)
+    news_with_sentiment = attach_sentiment(news_with_tickers)
+
+    opportunities = score_opportunities(
+        news_items=news_with_sentiment,
+        market_movers=market_movers,
+        reddit_signals=reddit_signals,
+        sec_filings=sec_filings,
+        symbol_universe=symbol_universe,
+    )
+    symbol_candidates = [item["ticker"] for item in opportunities] or [item["ticker"] for item in symbol_universe if item.get("ticker")]
+    oracle_profile = load_private_oracle_profile()
+    black_magic = generate_black_magic_reading(now, candidate_tickers=symbol_candidates, personal_profile=oracle_profile)
+    market_brief = build_market_brief(news_with_sentiment, opportunities)
 
     snapshot_paths = {
         "news": str(snapshot_json("news", raw_news, run_stamp)),
@@ -56,17 +69,6 @@ def run(use_mock_news: bool = False) -> Path:
         "black_magic": str(snapshot_json("black_magic", black_magic, run_stamp)),
         "symbol_universe": str(snapshot_json("symbol_universe", symbol_universe, run_stamp)),
     }
-
-    news_with_tickers = attach_tickers(raw_news, symbol_universe=symbol_universe)
-    news_with_sentiment = attach_sentiment(news_with_tickers)
-
-    opportunities = score_opportunities(
-        news_items=news_with_sentiment,
-        market_movers=market_movers,
-        reddit_signals=reddit_signals,
-        sec_filings=sec_filings,
-    )
-    market_brief = build_market_brief(news_with_sentiment, opportunities)
 
     report_path = generate_report(
         report_path=REPORTS_DIR / report_name,

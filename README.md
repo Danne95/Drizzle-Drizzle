@@ -42,6 +42,24 @@ The generated report path is printed after each run.
 Each run also replaces `latest_report.html` in the project root. Historical
 copies use `YYYY-MM-DD_HHMM.html` naming inside `reports/`.
 
+## Optional Private Oracle Profile
+
+The entertainment oracle can use a private local profile without committing
+personal data. Copy the template from `samples/oracle_profile.example.json` to
+`private/oracle_profile.json` and edit it locally:
+
+```json
+{
+  "name": "Your first name or nickname",
+  "birthdate": "1990-01-31",
+  "zodiac": "",
+  "chinese_zodiac": ""
+}
+```
+
+The `private/` folder is ignored by Git. The report does not print your name or
+birthdate; it only uses derived oracle outputs for the comedy section.
+
 ## Project Structure
 
 ```text
